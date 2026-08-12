@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Botto WebView Pro</title>
+    <title>Botto WebView Pro — LRouter</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body, html { width: 100%; height: 100%; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; }
@@ -16,11 +16,11 @@
         }
         .logo-box {
             width: 72px; height: 72px;
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
             font-size: 32px; font-weight: bold; color: white;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
             margin: 0 auto 16px;
         }
         h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
@@ -34,16 +34,16 @@
             color: white; font-size: 15px; outline: none;
             transition: all 0.3s ease;
         }
-        input[type="text"]:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        input[type="text"]:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); }
         
         button {
             width: 100%; padding: 14px 16px;
-            background: #3b82f6; border: none; border-radius: 12px;
+            background: #10b981; border: none; border-radius: 12px;
             color: white; font-size: 15px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
             transition: all 0.2s ease; margin-top: 4px;
         }
-        button:active { transform: scale(0.98); background: #2563eb; }
+        button:active { transform: scale(0.98); background: #059669; }
         
         #error {
             display: none; color: #f87171; font-size: 12px;
@@ -56,26 +56,26 @@
 </head>
 <body>
     <div class="card">
-        <div class="logo-box">🤖</div>
-        <h1>Botto WebView Pro</h1>
-        <p class="subtitle">Masukkan alamat server AI lokal Anda untuk memulai.</p>
+        <div class="logo-box">⚡</div>
+        <h1>LRouter Gateway</h1>
+        <p class="subtitle">Hubungkan ke endpoint LRouter (FlashRouter)</p>
         
         <div class="input-group">
-            <label for="serverUrl">Alamat Server</label>
-            <input type="text" id="serverUrl" value="http://192.168.1.100:7777" placeholder="http://192.168.1.100:7777" autocapitalize="off" autocorrect="off" spellcheck="false">
+            <label for="serverUrl">Alamat LRouter</label>
+            <input type="text" id="serverUrl" value="http://192.168.1.199:20129" placeholder="http://192.168.1.199:20129" autocapitalize="off" autocorrect="off" spellcheck="false">
         </div>
-        <div id="error">Alamat URL tidak valid. Contoh: http://192.168.1.100:7777</div>
+        <div id="error">Alamat URL tidak valid. Contoh: http://192.168.1.199:20129</div>
         
-        <button id="connectBtn">Hubungkan ke Server</button>
+        <button id="connectBtn">Hubungkan ke LRouter</button>
 
         <div class="hint">
-            • Pastikan perangkat berada di jaringan WiFi yang sama dengan server.<br>
+            • Endpoint aktif di port 20129.<br>
             • TTS otomatis menggunakan suara bawaan sistem Android.
         </div>
     </div>
 
     <script>
-        const STORAGE_KEY = 'botto_webview_pro_url';
+        const STORAGE_KEY = 'lrouter_webview_url';
         const input = document.getElementById('serverUrl');
         const btn = document.getElementById('connectBtn');
         const errorEl = document.getElementById('error');
@@ -103,9 +103,7 @@
             }
             errorEl.style.display = 'none';
             localStorage.setItem(STORAGE_KEY, origin);
-            
-            // Navigate directly to the server URL (full screen native webview)
-            window.location.href = origin + '/';
+            window.location.href = origin + '/dashboard';
         }
 
         btn.addEventListener('click', goToServer);
