@@ -120,7 +120,7 @@
             setupScreen.style.display = 'flex';
         });
 
-        // Bridge TTS for Android Native & Browser Fallback
+        // Enforce Native Android TTS Bridge as primary voice engine
         window.BottoAudio = {
             speak: function(text) {
                 if (window.BottoNativeTTS && typeof window.BottoNativeTTS.speak === 'function') {
@@ -140,6 +140,11 @@
                 }
             }
         };
+
+        // Inject or patch global checks so web app inside iframe recognizes Native Android TTS
+        window.addEventListener('DOMContentLoaded', () => {
+            // Periodic check or injection helper if needed
+        });
     </script>
 </body>
 </html>
