@@ -1,6 +1,6 @@
 {
   "name": "botto-webview-pro",
-  "displayName": "Botto WebView Pro",
+  "displayName": "BottoWebViewPro",
   "version": "2.0.0",
   "description": "Botto Advanced WebView Wrapper with Native TTS & Download Support",
   "main": "index.js",
@@ -13,7 +13,7 @@
   "author": "Botto Team",
   "license": "MIT",
   "devDependencies": {
-    "cordova-android": "^12.0.0"
+    "cordova-android": "^13.0.0"
   },
   "cordova": {
     "plugins": {},
