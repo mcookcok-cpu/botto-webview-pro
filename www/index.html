@@ -2,148 +2,115 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Botto WebView Pro</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body, html { width: 100%; height: 100%; background: #0f172a; color: #f8fafc; overflow: hidden; }
+        body, html { width: 100%; height: 100%; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; }
         
-        #setup-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 24px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        .card {
+            width: 100%; max-width: 380px; padding: 28px;
+            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); text-align: center;
         }
         .logo-box {
-            width: 80px; height: 80px;
+            width: 72px; height: 72px;
             background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            border-radius: 20px;
+            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 36px; font-weight: bold; color: white;
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
-            margin-bottom: 20px;
+            font-size: 32px; font-weight: bold; color: white;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            margin: 0 auto 16px;
         }
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; }
-        p.subtitle { font-size: 14px; color: #94a3b8; margin-bottom: 32px; text-align: center; }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        p.subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 24px; line-height: 1.4; }
         
-        .input-group {
-            width: 100%; max-width: 360px;
-            margin-bottom: 16px;
-        }
-        label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-group { text-align: left; margin-bottom: 16px; }
+        label { display: block; font-size: 11px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         input[type="text"] {
             width: 100%; padding: 14px 16px;
-            background: #1e293b; border: 2px solid #334155; border-radius: 12px;
-            color: white; font-size: 16px; outline: none;
+            background: #0f172a; border: 1px solid #334155; border-radius: 12px;
+            color: white; font-size: 15px; outline: none;
             transition: all 0.3s ease;
         }
         input[type="text"]:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
         
         button {
-            width: 100%; max-width: 360px; padding: 14px 16px;
+            width: 100%; padding: 14px 16px;
             background: #3b82f6; border: none; border-radius: 12px;
-            color: white; font-size: 16px; font-weight: 600; cursor: pointer;
+            color: white; font-size: 15px; font-weight: 600; cursor: pointer;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-            transition: all 0.2s ease; margin-top: 8px;
+            transition: all 0.2s ease; margin-top: 4px;
         }
         button:active { transform: scale(0.98); background: #2563eb; }
         
-        #browser-container {
-            display: none; width: 100%; height: 100%; position: relative;
+        #error {
+            display: none; color: #f87171; font-size: 12px;
+            margin-top: -10px; margin-bottom: 12px; text-align: left;
         }
-        iframe { width: 100%; height: 100%; border: none; background: white; }
-        
-        .floating-back {
-            position: absolute; top: 12px; left: 12px;
-            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1); color: white;
-            padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
-            cursor: pointer; z-index: 999; display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        .hint {
+            margin-top: 20px; font-size: 11px; color: #64748b; line-height: 1.5; text-align: left;
         }
     </style>
 </head>
 <body>
-    <div id="setup-screen">
+    <div class="card">
         <div class="logo-box">🤖</div>
         <h1>Botto WebView Pro</h1>
-        <p class="subtitle">Hubungkan ke server Botto AI lokal Anda</p>
+        <p class="subtitle">Masukkan alamat server AI lokal Anda untuk memulai.</p>
         
         <div class="input-group">
-            <label for="server-url">Alamat Server (URL / IP)</label>
-            <input type="text" id="server-url" value="http://192.168.1.100:7777" placeholder="http://192.168.1.100:7777">
+            <label for="serverUrl">Alamat Server</label>
+            <input type="text" id="serverUrl" value="http://192.168.1.100:7777" placeholder="http://192.168.1.100:7777" autocapitalize="off" autocorrect="off" spellcheck="false">
         </div>
+        <div id="error">Alamat URL tidak valid. Contoh: http://192.168.1.100:7777</div>
         
-        <button id="connect-btn">Hubungkan ke Server</button>
-    </div>
+        <button id="connectBtn">Hubungkan ke Server</button>
 
-    <div id="browser-container">
-        <button class="floating-back" id="back-settings-btn">⚙️ Pengaturan</button>
-        <iframe id="main-frame" src=""></iframe>
+        <div class="hint">
+            • Pastikan perangkat berada di jaringan WiFi yang sama dengan server.<br>
+            • TTS otomatis menggunakan suara bawaan sistem Android.
+        </div>
     </div>
 
     <script>
-        const setupScreen = document.getElementById('setup-screen');
-        const browserContainer = document.getElementById('browser-container');
-        const serverUrlInput = document.getElementById('server-url');
-        const connectBtn = document.getElementById('connect-btn');
-        const backSettingsBtn = document.getElementById('back-settings-btn');
-        const mainFrame = document.getElementById('main-frame');
+        const STORAGE_KEY = 'botto_webview_pro_url';
+        const input = document.getElementById('serverUrl');
+        const btn = document.getElementById('connectBtn');
+        const errorEl = document.getElementById('error');
 
-        // Load saved URL
-        const savedUrl = localStorage.getItem('botto_server_url');
-        if (savedUrl) {
-            serverUrlInput.value = savedUrl;
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) input.value = saved;
+
+        function normalizeUrl(raw) {
+            let v = (raw || '').trim();
+            if (!v) return null;
+            if (!/^https?:\/\//i.test(v)) v = 'http://' + v;
+            try {
+                let u = new URL(v);
+                return u.origin;
+            } catch (e) {
+                return null;
+            }
         }
 
-        connectBtn.addEventListener('click', () => {
-            let url = serverUrlInput.value.trim();
-            if (!url) return;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'http://' + url;
+        function goToServer() {
+            let origin = normalizeUrl(input.value);
+            if (!origin) {
+                errorEl.style.display = 'block';
+                return;
             }
-            localStorage.setItem('botto_server_url', url);
+            errorEl.style.display = 'none';
+            localStorage.setItem(STORAGE_KEY, origin);
             
-            setupScreen.style.display = 'none';
-            browserContainer.style.display = 'block';
-            backSettingsBtn.style.display = 'block';
-            mainFrame.src = url;
-        });
+            // Navigate directly to the server URL (full screen native webview)
+            window.location.href = origin + '/';
+        }
 
-        backSettingsBtn.addEventListener('click', () => {
-            mainFrame.src = '';
-            browserContainer.style.display = 'none';
-            backSettingsBtn.style.display = 'none';
-            setupScreen.style.display = 'flex';
-        });
-
-        // Enforce Native Android TTS Bridge as primary voice engine
-        window.BottoAudio = {
-            speak: function(text) {
-                if (window.BottoNativeTTS && typeof window.BottoNativeTTS.speak === 'function') {
-                    window.BottoNativeTTS.speak(text);
-                } else if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'id-ID';
-                    window.speechSynthesis.speak(utterance);
-                }
-            },
-            stop: function() {
-                if (window.BottoNativeTTS && typeof window.BottoNativeTTS.stop === 'function') {
-                    window.BottoNativeTTS.stop();
-                } else if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                }
-            }
-        };
-
-        // Inject or patch global checks so web app inside iframe recognizes Native Android TTS
-        window.addEventListener('DOMContentLoaded', () => {
-            // Periodic check or injection helper if needed
+        btn.addEventListener('click', goToServer);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') goToServer();
         });
     </script>
 </body>
