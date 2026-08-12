@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Botto WebView Pro</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body, html { width: 100%; height: 100%; background: #0f172a; color: #f8fafc; overflow: hidden; }
+        
+        #setup-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 24px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        .logo-box {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; font-weight: bold; color: white;
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; }
+        p.subtitle { font-size: 14px; color: #94a3b8; margin-bottom: 32px; text-align: center; }
+        
+        .input-group {
+            width: 100%; max-width: 360px;
+            margin-bottom: 16px;
+        }
+        label { display: block; font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input[type="text"] {
+            width: 100%; padding: 14px 16px;
+            background: #1e293b; border: 2px solid #334155; border-radius: 12px;
+            color: white; font-size: 16px; outline: none;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        button {
+            width: 100%; max-width: 360px; padding: 14px 16px;
+            background: #3b82f6; border: none; border-radius: 12px;
+            color: white; font-size: 16px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            transition: all 0.2s ease; margin-top: 8px;
+        }
+        button:active { transform: scale(0.98); background: #2563eb; }
+        
+        #browser-container {
+            display: none; width: 100%; height: 100%; position: relative;
+        }
+        iframe { width: 100%; height: 100%; border: none; background: white; }
+        
+        .floating-back {
+            position: absolute; top: 12px; left: 12px;
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1); color: white;
+            padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+            cursor: pointer; z-index: 999; display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div id="setup-screen">
+        <div class="logo-box">🤖</div>
+        <h1>Botto WebView Pro</h1>
+        <p class="subtitle">Hubungkan ke server Botto AI lokal Anda</p>
+        
+        <div class="input-group">
+            <label for="server-url">Alamat Server (URL / IP)</label>
+            <input type="text" id="server-url" value="http://192.168.1.100:7777" placeholder="http://192.168.1.100:7777">
+        </div>
+        
+        <button id="connect-btn">Hubungkan ke Server</button>
+    </div>
+
+    <div id="browser-container">
+        <button class="floating-back" id="back-settings-btn">⚙️ Pengaturan</button>
+        <iframe id="main-frame" src=""></iframe>
+    </div>
+
+    <script>
+        const setupScreen = document.getElementById('setup-screen');
+        const browserContainer = document.getElementById('browser-container');
+        const serverUrlInput = document.getElementById('server-url');
+        const connectBtn = document.getElementById('connect-btn');
+        const backSettingsBtn = document.getElementById('back-settings-btn');
+        const mainFrame = document.getElementById('main-frame');
+
+        // Load saved URL
+        const savedUrl = localStorage.getItem('botto_server_url');
+        if (savedUrl) {
+            serverUrlInput.value = savedUrl;
+        }
+
+        connectBtn.addEventListener('click', () => {
+            let url = serverUrlInput.value.trim();
+            if (!url) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'http://' + url;
+            }
+            localStorage.setItem('botto_server_url', url);
+            
+            setupScreen.style.display = 'none';
+            browserContainer.style.display = 'block';
+            backSettingsBtn.style.display = 'block';
+            mainFrame.src = url;
+        });
+
+        backSettingsBtn.addEventListener('click', () => {
+            mainFrame.src = '';
+            browserContainer.style.display = 'none';
+            backSettingsBtn.style.display = 'none';
+            setupScreen.style.display = 'flex';
+        });
+
+        // Bridge TTS for Android Native & Browser Fallback
+        window.BottoAudio = {
+            speak: function(text) {
+                if (window.BottoNativeTTS && typeof window.BottoNativeTTS.speak === 'function') {
+                    window.BottoNativeTTS.speak(text);
+                } else if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'id-ID';
+                    window.speechSynthesis.speak(utterance);
+                }
+            },
+            stop: function() {
+                if (window.BottoNativeTTS && typeof window.BottoNativeTTS.stop === 'function') {
+                    window.BottoNativeTTS.stop();
+                } else if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                }
+            }
+        };
+    </script>
+</body>
+</html>

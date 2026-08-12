@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.botto.webview2" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>BottoWebViewPro</name>
+    <description>Botto Advanced WebView Wrapper with Native TTS &amp; Download Support</description>
+    <author email="support@botto.local" href="https://botto.local">Botto Team</author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="*" />
+    
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <preference name="AndroidInsecureFileModeEnabled" value="true" />
+        <preference name="AllowFileAccessFromFileURLs" value="true" />
+        <preference name="AllowUniversalAccessFromFileURLs" value="true" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
+    </platform>
+    
+    <engine name="android" spec="^12.0.0" />
+</widget>
